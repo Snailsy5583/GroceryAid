@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
 public class GroceryList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long itemId;
+
+    @Column
     private Long listId;
     @Column
     private Long walmartItemSku;
@@ -25,6 +28,7 @@ public class GroceryList {
     private int itemQuantity;
 
     @ManyToOne
+    @JoinColumn(name = "user")
     @JsonBackReference
     private User user;
 }

@@ -17,6 +17,16 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartId;
+
     @OneToMany
+    @JoinColumn(name = "cartId")
     private Set<GroceryList> groceryListSet = new HashSet<>();
+
+    @OneToOne
+    @JoinTable(
+        name = "Bridge",
+        joinColumns = @JoinColumn(name = "cartId"),
+        inverseJoinColumns = @JoinColumn(name = "userId")
+    )
+    private User user;
 }
