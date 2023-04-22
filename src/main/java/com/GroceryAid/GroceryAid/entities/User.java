@@ -18,7 +18,7 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(name = "user_id")
     private Long userId;
     @Column
     private String userName;
@@ -27,24 +27,30 @@ public class User {
     @Column(unique = true, nullable = true)
     private String email;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+   /* @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JsonManagedReference
-    private Set<GroceryList> groceryListSet = new HashSet<>();
+    private Set<GroceryList> groceryListSet = new HashSet<>();*/
     
-    @OneToOne
+   /* @OneToOne
     @JoinTable(
         name = "Bridge",
         joinColumns = @JoinColumn(name = "userId"),
         inverseJoinColumns = @JoinColumn(name = "cartId")
     )
-    private Cart cart;
+    private Cart cart;*/
 
+   
     public User(UserDto userDto)
     {
         this.userName = userDto.getUserName();
         this.password = userDto.getPassword();
         this.email = userDto.getEmail();
     }
-
+    public GroceryList createGroceryList()
+    {
+        GroceryList groceryList = new GroceryList();
+        
+        return null;
+    }
 
 }

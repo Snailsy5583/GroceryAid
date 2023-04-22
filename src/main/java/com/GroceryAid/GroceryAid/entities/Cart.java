@@ -18,15 +18,18 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartId;
 
-    @OneToMany
-    @JoinColumn(name = "cartId")
-    private Set<GroceryList> groceryListSet = new HashSet<>();
-
     @OneToOne
-    @JoinTable(
+  //  @JoinColumn(name = "grocery_id")
+    //private Set<GroceryList> groceryListSet = new HashSet<>();
+    private GroceryList groceries = new GroceryList();
+
+   // @OneToOne(targetEntity = User.class, cascade = CascadeType.ALL)
+    /*@JoinTable(
         name = "Bridge",
         joinColumns = @JoinColumn(name = "cartId"),
         inverseJoinColumns = @JoinColumn(name = "userId")
-    )
-    private User user;
+    )*/
+   @OneToOne
+   @JoinColumn(name = "userId")
+    private User userId;
 }
