@@ -15,6 +15,7 @@ public class ItemDto {
 
 	private Long itemId;
 	private Long walmartSKU;
+	private String itemName;
 	private float itemPrice;
 	private int itemQuantity;
 	

@@ -36,7 +36,7 @@ public class UserController {
         return userService.userLogin(userDto);
     }
     
-    @PostMapping("/get_glist")
+    @PostMapping("/get_gList")
     public GroceryListDto getGroceryList(@RequestBody UserDto userDto) {
         return groceryListController.getGroceryList(userDto);
     }

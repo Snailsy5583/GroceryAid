@@ -24,6 +24,7 @@ public class Item {
 	private float itemPrice;
 	@Column(name = "item_quantity")
 	private int itemQuantity;
+	
 	public Item(ItemDto itemDto)
 	{
 		this.itemId=itemDto.getItemId();

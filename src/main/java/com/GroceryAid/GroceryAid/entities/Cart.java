@@ -15,7 +15,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class Cart {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "cart_id")
     private Long cartId;
 
     @OneToOne
@@ -31,5 +32,5 @@ public class Cart {
     )*/
    @OneToOne
    @JoinColumn(name = "userId")
-    private User userId;
+    private User user;
 }

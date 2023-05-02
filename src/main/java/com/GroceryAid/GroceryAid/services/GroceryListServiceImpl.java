@@ -1,5 +1,6 @@
 package com.GroceryAid.GroceryAid.services;
 
+import com.GroceryAid.GroceryAid.dtos.DeleteItemDto;
 import com.GroceryAid.GroceryAid.dtos.GroceryListDto;
 import com.GroceryAid.GroceryAid.dtos.UserDto;
 import com.GroceryAid.GroceryAid.entities.GroceryList;
@@ -32,6 +33,15 @@ public class GroceryListServiceImpl implements GroceryListService {
 	
 	@Override
 	public void deleteList(GroceryListDto gListDto) {
-	
+		var gList_op = gLRepo.findById(gListDto.getListId());
+		if (gList_op.isEmpty())
+			return;
+
+		var gList = gList_op.get();
+		var delItemDto = new DeleteItemDto();
+//		delItemDto.setItemIds(gList.getItemsList());
+		
+		
+		gLRepo.delete(gList);
 	}
 }

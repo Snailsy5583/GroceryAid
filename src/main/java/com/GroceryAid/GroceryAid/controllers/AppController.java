@@ -1,7 +1,10 @@
 package com.GroceryAid.GroceryAid.controllers;
 
+import com.GroceryAid.GroceryAid.dtos.CartDto;
 import com.GroceryAid.GroceryAid.dtos.UserDto;
 import com.GroceryAid.GroceryAid.entities.User;
+import com.GroceryAid.GroceryAid.services.CartService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +21,10 @@ public class AppController {
     {
         if (!isLoggedIn)
             return "redirect:/login";
-        else
+        else {
+            
             return "index";
+        }
     }
 
     @GetMapping("/register")
