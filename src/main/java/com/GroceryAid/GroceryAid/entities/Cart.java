@@ -15,18 +15,22 @@ import java.util.Set;
 @AllArgsConstructor
 public class Cart {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "cart_id")
     private Long cartId;
 
-    @OneToMany
-    @JoinColumn(name = "cartId")
-    private Set<GroceryList> groceryListSet = new HashSet<>();
-
     @OneToOne
-    @JoinTable(
+  //  @JoinColumn(name = "grocery_id")
+    //private Set<GroceryList> groceryListSet = new HashSet<>();
+    private GroceryList groceries = new GroceryList();
+
+   // @OneToOne(targetEntity = User.class, cascade = CascadeType.ALL)
+    /*@JoinTable(
         name = "Bridge",
         joinColumns = @JoinColumn(name = "cartId"),
         inverseJoinColumns = @JoinColumn(name = "userId")
-    )
+    )*/
+   @OneToOne
+   @JoinColumn(name = "userId")
     private User user;
 }

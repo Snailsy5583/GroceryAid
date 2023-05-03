@@ -1,6 +1,8 @@
 package com.GroceryAid.GroceryAid.services;
 
+import com.GroceryAid.GroceryAid.dtos.GroceryListDto;
 import com.GroceryAid.GroceryAid.dtos.UserDto;
+import com.GroceryAid.GroceryAid.entities.GroceryList;
 import com.GroceryAid.GroceryAid.entities.User;
 import com.GroceryAid.GroceryAid.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,4 +43,12 @@ public class UserServiceImpl implements UserService {
         }
         return "Login failed.";
     }
+
+    @Override
+    public GroceryListDto createGroceryList(UserDto userDto) {
+
+        return null;
+    }
+    
+   
 }

@@ -1,5 +1,6 @@
 package com.GroceryAid.GroceryAid.dtos;
 
+import com.GroceryAid.GroceryAid.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,17 +13,15 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto implements Serializable {
-    private Long userId;
-    private String userName;
-    private String password;
-    private String email;
-    private Set<GroceryListDto> groceryListDtoSet = new HashSet<>();
-//
-//    public NoteDto(Note note){
-//        if (note.getId() != null){
-//            this.id = note.getId();
-//        }
-//        if (note.getBody() != null){
-//            this.body = note.getBody();
-//        }
-    }
+	private Long userId;
+	private String userName;
+	private String password;
+	private String email;
+	private Set<GroceryListDto> groceryListDtoSet = new HashSet<>();
+	
+	public UserDto(User user) {
+		this.userName = user.getUserName();
+		this.password = user.getPassword();
+		this.email = user.getEmail();
+	}
+}

@@ -15,7 +15,11 @@ import java.util.Set;
 @NoArgsConstructor
 public class CartDto implements Serializable {
     private Long cartId;
-    private Set<GroceryListDto> groceryListDtoSet = new HashSet<>();
+    //private Set<GroceryListDto> groceryListDtoSet = new HashSet<>();
+    
+    private GroceryListDto groceries = new GroceryListDto();
+    
+    private String userName;
 
 //    public BridgeDto(Note note){
 //        if (note.getId() != null){

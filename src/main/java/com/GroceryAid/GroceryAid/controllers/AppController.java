@@ -1,32 +1,61 @@
 package com.GroceryAid.GroceryAid.controllers;
 
-import jakarta.servlet.http.HttpSession;
+import com.GroceryAid.GroceryAid.dtos.CartDto;
+import com.GroceryAid.GroceryAid.dtos.UserDto;
+import com.GroceryAid.GroceryAid.entities.User;
+import com.GroceryAid.GroceryAid.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class AppController {
-    @GetMapping("/login")
-    public String loginUser() {
-        return "login";
-    }
-
-    @GetMapping("/signup")
-    public String signupUser() {
-        return "signup";
-    }
+    private boolean isLoggedIn = false;
+    private UserDto loggedInUser = null;
 
     @GetMapping("/")
-    public String home(Model model, HttpSession session) {
-        return "index";
+    public String home()
+    {
+        if (!isLoggedIn)
+            return "redirect:/login";
+        else {
+            
+            return "index";
+        }
     }
 
-    @GetMapping("/Grocerylist/user={user_id}/gList={gList_id}")
-    public String editGroceryList(Model model, HttpSession session) {
+    @GetMapping("/register")
+    public String register(Model model)
+    {
+        model.addAttribute("userDto", new UserDto());
+        return "register_form";
+    }
 
-        return "grocery_list";
+    @GetMapping("/process_register")
+    public ModelAndView processRegister(UserDto userDto)
+    {
+        ModelAndView mav =  new ModelAndView("forward:/api/v1/users/register");
+        mav.addObject(userDto);
+
+        return mav;
+    }
+
+    @GetMapping("/login")
+    public String login()
+    {
+        if (!isLoggedIn)
+            isLoggedIn = true;
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout()
+    {
+        isLoggedIn = false;
+        return "redirect:/";
     }
 }
