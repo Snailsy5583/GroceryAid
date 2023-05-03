@@ -25,15 +25,15 @@ public class GroceryList {
 	@Column(name = "item_id")
 	Collection<Item> itemsList;
 	
-	/*@ManyToOne
-	@JoinColumn(name = "user")
+	@ManyToOne
+	@JoinColumn(name = "user_id")
 	@JsonBackReference
-	private User user;*/// glist should have access to user
+	private User user; // glist should have access to user
 	
 	public GroceryList(GroceryListDto groceryListDto) {
 		this.grocery_id = groceryListDto.getListId();
 		this.itemsList = groceryListDto.getItemsList();
-//		 this.user = groceryListDto.getUser();
+		this.user = groceryListDto.getUser();
 	}
 	
 	public void setGrocery_id(Long grocery_id) {

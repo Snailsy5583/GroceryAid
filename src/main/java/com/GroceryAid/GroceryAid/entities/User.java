@@ -26,10 +26,10 @@ public class User {
     private String password;
     @Column(unique = true, nullable = true)
     private String email;
-
-   /*@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JsonManagedReference
-    private Set<GroceryList> groceryListSet = new HashSet<>();*/
+    private Set<GroceryList> groceryListSet = new HashSet<>();
     
    /* @OneToOne
     @JoinTable(

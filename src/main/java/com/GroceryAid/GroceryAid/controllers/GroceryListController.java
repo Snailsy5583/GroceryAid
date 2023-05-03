@@ -25,35 +25,13 @@ public class GroceryListController {
 	@Autowired
 	private UserRepository userRepository;
 	
-	@PostMapping("/get_glist")
-	public GroceryListDto getGroceryList(@RequestBody UserDto userDto) {
+	@PostMapping("/get_glist/{gListID}")
+	public GroceryListDto getGroceryList(@RequestBody UserDto userDto, Long gListID) {
+		var gList = groceryListRepository.findById(gListID);
+		if (gList.isEmpty() || gList.get().getUser().getUserId() != userDto.getUserId())
+			return null;
 		
-		
-		//return new GroceryListDto(groceryListRepository.findByUser(new User(userDto)).get());
-		return null;
-	}
-	
-	@GetMapping
-	public String testSaveGroceryApi() {
-		
-		/*GroceryList groceryList = new GroceryList();
-		
-		groceryList.setListId(2L);
-		groceryList.setUser(userRepository.findByUserName("kunal").get());
-		Item item = new Item();
-		item.setItemName("soap");
-		item.setItemPrice(10);
-		item.setItemQuantity(1);
-		item.setWalmartSKU(12L);
-		item.setItemId(1L);
-		
-		ArrayList<Item> items = new ArrayList<>();
-		items.add(item);
-		
-		groceryList.setItemsList(items);
-		
-		groceryListRepository.save(groceryList);*/
-		return "";
+		return new GroceryListDto(gList.get());
 	}
 	
 }

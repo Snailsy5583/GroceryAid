@@ -35,9 +35,4 @@ public class UserController {
     public String userLogin(@RequestBody UserDto userDto){
         return userService.userLogin(userDto);
     }
-    
-    @PostMapping("/get_gList")
-    public GroceryListDto getGroceryList(@RequestBody UserDto userDto) {
-        return groceryListController.getGroceryList(userDto);
-    }
 }
