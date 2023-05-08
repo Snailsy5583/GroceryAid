@@ -10,6 +10,8 @@ import com.GroceryAid.GroceryAid.repositories.GroceryListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class GroceryListServiceImpl implements GroceryListService {
 	@Autowired
@@ -21,19 +23,28 @@ public class GroceryListServiceImpl implements GroceryListService {
 	}
 	
 	@Override
-	public void deleteItem(GroceryListDto glistDto, Item item) {
+	public void deleteItem(GroceryListDto gListDto, Item item) {
 	
 	}
 	
 	@Override
-	public void addList(User user) {
-		GroceryList glist = new GroceryList();
-		//glist.setUser(user);
+	public GroceryListDto createList(String name, User user) {
+		GroceryList gList = new GroceryList(name, new ArrayList<>(), user);
+
+		System.out.println(gList.getName());
+		System.out.println(gList.getGroceryID());
+
+		gLRepo.save(gList);
+
+		System.out.println(user.getGroceryListSet().size());
+		System.out.println(gLRepo.findById(gList.getGroceryID()).get().getUser().getUserName());
+
+		return new GroceryListDto(gList);
 	}
 	
 	@Override
 	public void deleteList(GroceryListDto gListDto) {
-		var gList_op = gLRepo.findById(gListDto.getListId());
+		var gList_op = gLRepo.findById(gListDto.getListID());
 		if (gList_op.isEmpty())
 			return;
 

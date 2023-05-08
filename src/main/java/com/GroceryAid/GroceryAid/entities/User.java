@@ -1,12 +1,14 @@
 package com.GroceryAid.GroceryAid.entities;
 
 import com.GroceryAid.GroceryAid.dtos.UserDto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,7 +21,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Long userId;
+    private Long userID;
     @Column
     private String userName;
     @Column
@@ -27,9 +29,9 @@ public class User {
     @Column(unique = true, nullable = true)
     private String email;
     
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "user")
     @JsonManagedReference
-    private Set<GroceryList> groceryListSet = new HashSet<>();
+    private Collection<GroceryList> groceryListSet = new HashSet<>();
     
    /* @OneToOne
     @JoinTable(
@@ -42,15 +44,10 @@ public class User {
    
     public User(UserDto userDto)
     {
-        this.userName = userDto.getUserName();
+        this.userID = userDto.getUserID();
+        this.userName = userDto.getUsername();
         this.password = userDto.getPassword();
         this.email = userDto.getEmail();
-    }
-    public GroceryList createGroceryList()
-    {
-        GroceryList groceryList = new GroceryList();
-        
-        return null;
     }
 
 }

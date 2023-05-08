@@ -3,59 +3,63 @@ package com.GroceryAid.GroceryAid.controllers;
 import com.GroceryAid.GroceryAid.dtos.CartDto;
 import com.GroceryAid.GroceryAid.dtos.UserDto;
 import com.GroceryAid.GroceryAid.entities.User;
+import com.GroceryAid.GroceryAid.repositories.GroceryListRepository;
 import com.GroceryAid.GroceryAid.services.CartService;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class AppController {
-    private boolean isLoggedIn = false;
-    private UserDto loggedInUser = null;
+    @Autowired
+    GroceryListRepository groceryListRepository;
 
     @GetMapping("/")
-    public String home()
+    public String home(HttpSession session)
     {
-        if (!isLoggedIn)
+        if (session.getAttribute("user") == null)
             return "redirect:/login";
-        else {
-            
-            return "index";
-        }
+
+        return "index";
     }
 
-    @GetMapping("/register")
-    public String register(Model model)
+    @GetMapping("/grocery-list/{gListID}")
+    public String editGroceryList(@PathVariable("gListID") Long gListID,  HttpSession session, Model model)
+    {
+        if (session.getAttribute("user") == null)
+            return "redirect:/login";
+
+        model.addAttribute("g_list", groceryListRepository.findById(gListID).get());
+
+        System.out.println("sys");
+
+        return "grocery_list";
+    }
+
+    @GetMapping("/signup")
+    public String signUp(Model model)
     {
         model.addAttribute("userDto", new UserDto());
-        return "register_form";
-    }
-
-    @GetMapping("/process_register")
-    public ModelAndView processRegister(UserDto userDto)
-    {
-        ModelAndView mav =  new ModelAndView("forward:/api/v1/users/register");
-        mav.addObject(userDto);
-
-        return mav;
+        return "signup";
     }
 
     @GetMapping("/login")
     public String login()
     {
-        if (!isLoggedIn)
-            isLoggedIn = true;
-
-        return "redirect:/";
+        return "login";
     }
 
     @GetMapping("/logout")
-    public String logout()
+    public String logout(HttpSession session)
     {
-        isLoggedIn = false;
+        session.invalidate();
         return "redirect:/";
     }
 }

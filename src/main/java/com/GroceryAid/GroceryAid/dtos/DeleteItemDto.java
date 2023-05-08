@@ -13,6 +13,6 @@ import java.util.List;
 public class DeleteItemDto {
 	
 	private String userName;
-	private List<Long> itemIds = new ArrayList<>(); // user will click on delete button so no need to go by name
+	private List<Long> itemIDs = new ArrayList<>(); // user will click on delete button so no need to go by name
 	// try going by List<Item> itself instead of name (if possible)
 }

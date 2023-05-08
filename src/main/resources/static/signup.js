@@ -1,20 +1,19 @@
-const registerForm = document.getElementById('signup');
-const registerEmail = document.getElementById('email');
-const registerUsername = document.getElementById('username');
-const registerPassword = document.getElementById('password');
+const form = document.getElementById('signup');
+const email = document.getElementById('email');
+const username = document.getElementById('username');
+const password = document.getElementById('password');
 
 const headers = {
-    'Content-Type':'application/json'
+    'Content-Type': 'application/json'
 };
 
-
-const handleSubmit = async (e) =>{
+const handleSubmit = async(e) => {
     e.preventDefault();
 
     let bodyObj = {
-        email: registerEmail.value,
-        username: registerUsername.value,
-        password: registerPassword.value
+        email: email.value,
+        username: username.value,
+        password: password.value
     };
 
     const response = await fetch("http://localhost:8080/api/v1/users/register", {
@@ -23,11 +22,9 @@ const handleSubmit = async (e) =>{
         headers: headers
     }).catch(err => console.error(err.message));
 
-    const responseArr = await response.json();
-
     if (response.status === 200) {
-        window.location.replace(responseArr[0]);
+        window.location.replace(await response.valueOf().text());
     };
 }
 
-registerForm.addEventListener("submit", handleSubmit);
+form.addEventListener("submit", handleSubmit);

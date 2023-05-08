@@ -13,14 +13,15 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto implements Serializable {
-	private Long userId;
-	private String userName;
+	private Long userID;
+	private String username;
 	private String password;
 	private String email;
 	private Set<GroceryListDto> groceryListDtoSet = new HashSet<>();
 	
 	public UserDto(User user) {
-		this.userName = user.getUserName();
+		this.userID = user.getUserID();
+		this.username = user.getUserName();
 		this.password = user.getPassword();
 		this.email = user.getEmail();
 	}

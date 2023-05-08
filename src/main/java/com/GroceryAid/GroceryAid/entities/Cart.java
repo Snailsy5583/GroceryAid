@@ -1,12 +1,10 @@
 package com.GroceryAid.GroceryAid.entities;
 
+import com.GroceryAid.GroceryAid.dtos.CartDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "Cart")
@@ -17,11 +15,9 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "cart_id")
-    private Long cartId;
+    private Long cartID;
 
     @OneToOne
-  //  @JoinColumn(name = "grocery_id")
-    //private Set<GroceryList> groceryListSet = new HashSet<>();
     private GroceryList groceries = new GroceryList();
 
    // @OneToOne(targetEntity = User.class, cascade = CascadeType.ALL)
@@ -31,6 +27,13 @@ public class Cart {
         inverseJoinColumns = @JoinColumn(name = "userId")
     )*/
    @OneToOne
-   @JoinColumn(name = "userId")
+   @JoinColumn(name = "user_id")
     private User user;
+
+   public Cart(CartDto cartDto)
+   {
+       this.cartID = cartDto.getCartID();
+       this.groceries = new GroceryList(cartDto.getGroceries());
+       this.user = new User(cartDto.getUser());
+   }
 }

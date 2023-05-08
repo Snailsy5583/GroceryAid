@@ -15,7 +15,7 @@ public class Item {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "item_id")
-	private Long itemId;
+	private Long itemID;
 	@Column(name = "walmart_sku")
 	private Long walmartSKU;
 	@Column(name = "item_name")
@@ -27,17 +27,10 @@ public class Item {
 	
 	public Item(ItemDto itemDto)
 	{
-		this.itemId=itemDto.getItemId();
+		this.itemID =itemDto.getItemID();
 		this.walmartSKU=itemDto.getWalmartSKU();
+		this.itemName=itemDto.getItemName();
 		this.itemPrice=itemDto.getItemPrice();
 		this.itemQuantity=itemDto.getItemQuantity();
-	}
-	
-	public Long getItemId() {
-		return itemId;
-	}
-	
-	public void setItemId(Long itemId) {
-		this.itemId = itemId;
 	}
 }

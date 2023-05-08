@@ -1,16 +1,13 @@
 package com.GroceryAid.GroceryAid.services;
 
-import com.GroceryAid.GroceryAid.dtos.GroceryListDto;
 import com.GroceryAid.GroceryAid.dtos.UserDto;
-import com.GroceryAid.GroceryAid.entities.GroceryList;
 import com.GroceryAid.GroceryAid.entities.User;
 import com.GroceryAid.GroceryAid.repositories.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,36 +16,44 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Override
+    public UserDto getLoggedInUser(HttpSession session) {
+        UserDto user =  (UserDto) session.getAttribute("user");
+
+        var user_op = userRepository.findById(user.getUserID());
+        if (user_op.isEmpty())
+            return null;
+
+        session.setAttribute("user", new UserDto(user_op.get()));
+
+        user =  (UserDto) session.getAttribute("user");
+        return user;
+    }
+
     @Override
     public String addUser(UserDto userDto) {
-        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        String encodedPass = passwordEncoder.encode(userDto.getPassword());
+        System.out.println(userDto.getPassword());
+        System.out.println(encodedPass);
+        userDto.setPassword(encodedPass);
         userRepository.save(new User(userDto));
-        return null;
+
+        return "login";
     }
 
     @Override
-    public String userLogin(UserDto userDto) {
-        Optional<User> user = userRepository.findByUserName(userDto.getUserName());
-        if (user.isPresent())
+    public UserDto userLogin(UserDto userDto) {
+        Optional<User> user = userRepository.findByUserName(userDto.getUsername());
+        if (user.isEmpty())
+            return null;
+
+        if (passwordEncoder.matches(userDto.getPassword(), user.get().getPassword()))
         {
-            String encodedPassword = passwordEncoder.encode(userDto.getPassword());
-            if (encodedPassword.equals(user.get().getPassword()))
-            {
-                return "Login Success.";
-            }
-            else
-            {
-                return "Username exists.";
-            }
+            System.out.println(user.get().getUserID());
+            return new UserDto(user.get());
+        } else {
+            return null;
         }
-        return "Login failed.";
     }
-
-    @Override
-    public GroceryListDto createGroceryList(UserDto userDto) {
-
-        return null;
-    }
-    
-   
 }

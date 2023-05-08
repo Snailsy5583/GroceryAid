@@ -1,9 +1,6 @@
 package com.GroceryAid.GroceryAid.services;
 
-import com.GroceryAid.GroceryAid.dtos.CartDto;
-import com.GroceryAid.GroceryAid.dtos.DeleteGroceryListDto;
-import com.GroceryAid.GroceryAid.dtos.DeleteItemDto;
-import com.GroceryAid.GroceryAid.dtos.GroceryListDto;
+import com.GroceryAid.GroceryAid.dtos.*;
 import com.GroceryAid.GroceryAid.entities.Cart;
 import com.GroceryAid.GroceryAid.entities.GroceryList;
 import com.GroceryAid.GroceryAid.entities.Item;
@@ -16,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -38,20 +34,19 @@ public class CartServiceImpl implements CartService {
 	
 	@Override
 	public boolean addToCart(CartDto cartDto) {
+		Cart cart = new Cart(cartDto);
 		
-		Cart cart = new Cart();
-		cart.setCartId(cartDto.getCartId());
-		
-		Optional<User> user = userRepository.findByUserName(cartDto.getUserName());
-		
-		if (user.isEmpty())
+		if (cartDto.getUser() == null)
 			return false;
+
+		User user = new User(cartDto.getUser());
 		
-		Optional<Cart> cartDBop = cartRepository.findByUser(user.get());
+		Optional<Cart> cartDBop = cartRepository.findByUser(user);
 		if (cartDBop.isPresent()) {
 			updateCart(cartDto, cartDBop.get());
-		} else { // there should always be 1 cart for a user, create a new cart when creating a new user
-			cart.setUser(user.get());
+		} else {
+			// there should always be 1 cart for a user, create a new cart when creating a new user
+			cart.setUser(user);
 			GroceryList groceryList = new GroceryList(cartDto.getGroceries());
 			
 			List<Item> items = itemRepository.saveAll(groceryList.getItemsList());
@@ -75,16 +70,13 @@ public class CartServiceImpl implements CartService {
 			
 			if (cartOp.isPresent()) {
 				Cart cart = cartOp.get();
-				cartDto.setCartId(cart.getCartId());
-				cartDto.setUserName(userName);
+				cartDto.setCartID(cart.getCartID());
+				cartDto.setUser(new UserDto(user));
 				
-				GroceryListDto groceryListDto = new GroceryListDto();
-				groceryListDto.setListId(cart.getGroceries().getGrocery_id());
-				groceryListDto.setItemsList(cart.getGroceries().getItemsList());
+				GroceryListDto groceryListDto = new GroceryListDto(cart.getGroceries());
 				
 				cartDto.setGroceries(groceryListDto);
 			}
-			
 		}
 		return cartDto;
 	}
@@ -132,9 +124,9 @@ public class CartServiceImpl implements CartService {
 				GroceryList groceryList = cartDB.getGroceries();
 				Collection<Item> itemsDB = groceryList.getItemsList();
 				
-				for (long itemId : deleteItemDto.getItemIds()) { // change to id
-					//Item itemToDelete = itemsDB.stream().filter(x -> x.getItemId().equalsIgnoreCase(item)).findAny().orElse(null);
-					var item = itemRepository.getById(itemId);
+				for (long itemID : deleteItemDto.getItemIDs()) { // change to id
+					//Item itemToDelete = itemsDB.stream().filter(x -> x.getItemID().equalsIgnoreCase(item)).findAny().orElse(null);
+					var item = itemRepository.getById(itemID);
 					itemsDB.remove(item);
 					groceryList.setItemsList(itemsDB);
 					groceryListRepository.save(groceryList);
@@ -156,9 +148,8 @@ public class CartServiceImpl implements CartService {
 		
 		Set<Item> finalItemList = new HashSet<>();
 		
-		for (Item i : cartDto.getGroceries().getItemsList()) {
-			
-			Item item = itemsDB.stream().filter(x -> x.getItemName().equalsIgnoreCase(i.getItemName())).findAny().orElse(null);
+		for (ItemDto i : cartDto.getGroceries().getItemsList()) {
+			Item item = itemsDB.stream().filter(x -> x.getWalmartSKU() == i.getWalmartSKU()).findAny().orElse(null);
 			
 			if (item != null) {
 				item.setItemQuantity(i.getItemQuantity() + item.getItemQuantity());
@@ -166,7 +157,7 @@ public class CartServiceImpl implements CartService {
 				finalItemList.add(itemRepository.save(item));
 			} else {
 				
-				finalItemList.add(itemRepository.save(i));
+				finalItemList.add(itemRepository.save(new Item(i)));
 			}
 		}
 		

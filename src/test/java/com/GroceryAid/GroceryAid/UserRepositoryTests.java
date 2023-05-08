@@ -27,7 +27,7 @@ public class UserRepositoryTests {
 
         User savedUser = repo.save(user);
 
-        User existUser = entityManager.find(User.class, savedUser.getUserId());
+        User existUser = entityManager.find(User.class, savedUser.getUserID());
 
         assert(user.getEmail()).equals(existUser.getEmail());
 

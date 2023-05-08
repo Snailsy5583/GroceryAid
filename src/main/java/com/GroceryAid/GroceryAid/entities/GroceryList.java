@@ -2,11 +2,14 @@ package com.GroceryAid.GroceryAid.entities;
 
 import com.GroceryAid.GroceryAid.dtos.GroceryListDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.CascadeType;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
@@ -18,26 +21,40 @@ import java.util.Collection;
 public class GroceryList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	//@Column(name = "grocery_id")
-	private Long grocery_id;
+	@Column(name = "grocery_id")
+	private Long groceryID;
+
+	@Column(name="name", unique = true)
+	private String name;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	@Column(name = "item_id")
 	Collection<Item> itemsList;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	@JsonBackReference
-	private User user; // glist should have access to user
+	private User user; // gList should have access to user
 	
 	public GroceryList(GroceryListDto groceryListDto) {
-		this.grocery_id = groceryListDto.getListId();
-		this.itemsList = groceryListDto.getItemsList();
+		this.groceryID = groceryListDto.getListID();
+		this.name = groceryListDto.getName();
+		this.itemsList = new ArrayList<>();
+		for (var item : groceryListDto.getItemsList())
+		{
+			this.itemsList.add(new Item(item));
+		}
 		this.user = groceryListDto.getUser();
 	}
+
+	public GroceryList(String name, Collection<Item> itemsList, User user) {
+		this.name = name;
+		this.itemsList = itemsList;
+		this.user = user;
+	}
 	
-	public void setGrocery_id(Long grocery_id) {
-		this.grocery_id = grocery_id;
+	public void setGroceryID(Long groceryID) {
+		this.groceryID = groceryID;
 	}
 	
 	public void setItemsList(Collection<Item> itemsList) {

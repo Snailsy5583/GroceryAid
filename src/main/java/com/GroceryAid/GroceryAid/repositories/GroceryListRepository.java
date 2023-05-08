@@ -12,5 +12,5 @@ import java.util.Optional;
 @Repository
 public interface GroceryListRepository extends JpaRepository<GroceryList, Long> {
     //Optional<GroceryList> findByUser(User user);
-
+	Optional<GroceryList> findByName(String name);
 }

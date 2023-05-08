@@ -2,16 +2,12 @@ package com.GroceryAid.GroceryAid.controllers;
 
 import com.GroceryAid.GroceryAid.dtos.CartDto;
 import com.GroceryAid.GroceryAid.dtos.DeleteItemDto;
-import com.GroceryAid.GroceryAid.dtos.ItemDto;
 import com.GroceryAid.GroceryAid.dtos.UserDto;
-import com.GroceryAid.GroceryAid.entities.Cart;
 import com.GroceryAid.GroceryAid.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/cart")
@@ -30,8 +26,8 @@ public class CartController {
 	
 	@GetMapping("/getcartdetails")
 	public ResponseEntity<CartDto> getCart(@RequestBody UserDto userDto) throws Exception {
-		CartDto cartDto = cartService.getCartDetails(userDto.getUserName());
-		if (cartDto.getCartId() == null) {
+		CartDto cartDto = cartService.getCartDetails(userDto.getUsername());
+		if (cartDto.getCartID() == null) {
 			throw new  Exception("Cart is empty");
 		}
 		
@@ -45,7 +41,7 @@ public class CartController {
 	
 	@DeleteMapping("/clear")
 	public void clearCart (@RequestBody UserDto user){
-		cartService.clearCart(user.getUserName());
+		cartService.clearCart(user.getUsername());
 	}
 	
 }
